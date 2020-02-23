@@ -8,7 +8,8 @@ import requests
 
 load_dotenv() #> loads contents of the .env file into the script's environment
 
-symbol = "TSLA"
+symbol = ""
+symbol = input("Please input a stock symbol that you are looking to buy:")
 api_key = os.environ.get("ALPHAVANTAGE_API_KEY")
 #ask user for the symbol 
 request_url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&apikey={api_key}"
