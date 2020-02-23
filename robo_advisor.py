@@ -1,6 +1,10 @@
 #INFO INPUTS 
-import requests 
+
 import json
+import csv
+
+import requests 
+
 
 request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=MSFT&apikey=demo"
 response = requests.get(request_url)
@@ -36,12 +40,15 @@ recent_low = min(low_prices)
 def to_usd(my_price):
     """
     Converts a numeric value to usd-formatted string, for printing and display purposes.
-    Source: https://github.com/prof-rossetti/intro-to-python/blob/master/notes/python/datatypes/numbers.md#formatting-as-currency
+    Source: https://github.com/prof-rossetti/intro-to-python/blob/master/notes/python/datatypes/numbers.md #formatting-as-currency
     Param: my_price (int or float) like 4000.444444
     Example: to_usd(4000.444444)
     Returns: $4,000.44
     """
     return f"${my_price:,.2f}" 
+
+
+
 
 
 #INFO OUTPUTS 
@@ -61,5 +68,20 @@ print("-------------------------")
 print("RECOMMENDATION: BUY!")
 print("RECOMMENDATION REASON: TODO")
 print("-------------------------")
+print("WRITING DATA INTO CSV...")
+print("-------------------------")
 print("HAPPY INVESTING!")
 print("-------------------------")
+#write a csv file into the data directory 
+
+csv_file_path = "data/prices.csv" # a relative filepath
+
+with open(csv_file_path, "w") as csv_file: # "w" means "open the file for writing"
+    writer = csv.DictWriter(csv_file, fieldnames=["city", "name"])
+    writer.writeheader() # uses fieldnames set above
+    writer.writerow({"city": "New York", "name": "Yankees"})
+    writer.writerow({"city": "New York", "name": "Mets"})
+    writer.writerow({"city": "Boston", "name": "Red Sox"})
+    writer.writerow({"city": "New Haven", "name": "Ravens"})
+
+
