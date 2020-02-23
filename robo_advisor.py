@@ -55,8 +55,6 @@ def to_usd(my_price):
 
 
 
-
-
 #INFO OUTPUTS 
 print("-------------------------")
 print("SELECTED SYMBOL: XYZ")
