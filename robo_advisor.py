@@ -21,24 +21,35 @@ while(correct == 0):
     if(symbol.isalpha() == 1):
         correct = 1
         if(len(symbol) > 5):
-            print("Sorry you inputed the wrong information. You inputed more than 5 letters! Please try again! A ticker is only between 1-5 letters")
+            print("OOPS! Sorry you inputed the wrong information. You inputed more than 5 letters! Please try again! A ticker is only between 1-5 letters")
             correct = 0
     else:
-        print("Sorry you inputed the wrong information. You inputed numbers instead of letters! Please try again! A ticker is only letters and is between 1-5 letters")
+        print("OOPS! Sorry you inputed the wrong information. You inputed numbers instead of letters! Please try again! A ticker is only letters and is between 1-5 letters")
 
 
 
 api_key = os.environ.get("ALPHAVANTAGE_API_KEY")
 request_url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&apikey={api_key}"
 response = requests.get(request_url)
-#print(type(response)) 
-#print(response.status_code)
-#print(response.text)
+while(response.status_code != 200):
+     print("OOPS sorry we encountered an error on calling the API. Please try again.")
+     while(correct == 0):
+        symbol = input("PLEASE INPUT A STOCK YOU ARE LOOKING TO BUY: ")
+        if(symbol.isalpha() == 1):
+            correct = 1
+            if(len(symbol) > 5):
+                print("OOPS! Sorry you inputed the wrong information. You inputed more than 5 letters! Please try again! A ticker is only between 1-5 letters")
+                correct = 0
+        else:
+            print("OOPS! Sorry you inputed the wrong information. You inputed numbers instead of letters! Please try again! A ticker is only letters and is between 1-5 letters")
+
 
 
 parsed_response = json.loads(response.text)
 
 tsd = parsed_response["Time Series (Daily)"]
+
+
 dates = list(tsd.keys())
 lastest_day = dates[0] 
 #sort this to ensure that the latest day is first 

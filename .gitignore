@@ -1,5 +1,3 @@
-
-
-# ignore secret environment variable values in the ".env" file:
 .env
-.DS_Store
+
+
