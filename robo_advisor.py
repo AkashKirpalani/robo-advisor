@@ -31,7 +31,7 @@ while(correct == 0):
 api_key = os.environ.get("ALPHAVANTAGE_API_KEY")
 request_url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&apikey={api_key}"
 response = requests.get(request_url)
-while(response.status_code != 200):
+while(response.status_code != 200)
      print("OOPS sorry we encountered an error on calling the API. Please try again.")
      while(correct == 0):
         symbol = input("PLEASE INPUT A STOCK YOU ARE LOOKING TO BUY: ")
