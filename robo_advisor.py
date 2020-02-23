@@ -1,12 +1,17 @@
 #INFO INPUTS 
-
 import json
 import csv
-
+from dotenv import load_dotenv
+import os
 import requests 
 
 
-request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=MSFT&apikey=demo"
+load_dotenv() #> loads contents of the .env file into the script's environment
+
+symbol = "TSLA"
+api_key = os.environ.get("ALPHAVANTAGE_API_KEY")
+#ask user for the symbol 
+request_url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&apikey={api_key}"
 response = requests.get(request_url)
 #print(type(response)) 
 #print(response.status_code)
