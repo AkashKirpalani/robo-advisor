@@ -10,8 +10,24 @@ import requests
 
 load_dotenv() #> loads contents of the .env file into the script's environment
 
-symbol = ""
-symbol = input("Please input a stock symbol that you are looking to buy: ")
+symbol = "99"
+correct = 0
+
+print("WELCOME TO THE ROBO ADVISOR PROGRAM! WE ADVISE ON STOCK SYMBOLS")
+
+
+while(correct == 0):
+    symbol = input("PLEASE INPUT A STOCK YOU ARE LOOKING TO BUY: ")
+    if(symbol.isalpha() == 1):
+        correct = 1
+        if(len(symbol) > 5):
+            print("Sorry you inputed the wrong information. You inputed more than 5 letters! Please try again! A ticker is only between 1-5 letters")
+            correct = 0
+    else:
+        print("Sorry you inputed the wrong information. You inputed numbers instead of letters! Please try again! A ticker is only letters and is between 1-5 letters")
+
+
+
 api_key = os.environ.get("ALPHAVANTAGE_API_KEY")
 request_url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&apikey={api_key}"
 response = requests.get(request_url)
@@ -90,9 +106,8 @@ print("WRITING DATA INTO CSV...")
 print("-------------------------")
 print("HAPPY INVESTING!")
 print("-------------------------")
+print("THANK YOU! DONE--PROGRAM HAS ENDED.")
 #write a csv file into the data directory 
-
-
 
 
 
