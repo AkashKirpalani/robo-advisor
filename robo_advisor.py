@@ -1,4 +1,5 @@
 #INFO INPUTS 
+import datetime
 import json
 import csv
 from dotenv import load_dotenv
@@ -6,12 +7,12 @@ import os
 import requests 
 
 
+
 load_dotenv() #> loads contents of the .env file into the script's environment
 
 symbol = ""
-symbol = input("Please input a stock symbol that you are looking to buy:")
+symbol = input("Please input a stock symbol that you are looking to buy: ")
 api_key = os.environ.get("ALPHAVANTAGE_API_KEY")
-#ask user for the symbol 
 request_url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&apikey={api_key}"
 response = requests.get(request_url)
 #print(type(response)) 
@@ -53,30 +54,47 @@ def to_usd(my_price):
     """
     return f"${my_price:,.2f}" 
 
-
+d = datetime.datetime.today()
 
 #INFO OUTPUTS 
 print("-------------------------")
-print("SELECTED SYMBOL: XYZ")
+print("SELECTED SYMBOL:",symbol)
 print("-------------------------")
-print("REQUESTING STOCK MARKET DATA...")
-#use date time module for this 
-print("REQUEST AT: 2018-02-20 02:00pm") 
+print("REQUESTING STOCK MARKET DATA...") 
+print("REQUEST AT:", d.strftime("%Y-%m-%d %I:%M %p")) 
 print("-------------------------")
 print(f"LATEST DAY: {last_refreshed}")
-#format as USD
 print(f"LATEST CLOSE: {to_usd(float(latest_close))}")
 print(f"RECENT HIGH: {to_usd(float(recent_high))}")
 print(f"RECENT LOW: {to_usd(float(recent_low))}")
 print("-------------------------")
-print("RECOMMENDATION: BUY!")
-print("RECOMMENDATION REASON: TODO")
+
+mean = (float(recent_high) + float(recent_low))/2
+
+if(float(latest_close) < float(mean)):
+    print("RECOMMENDATION: BUY!")
+    print("RECOMMENDATION REASON: The company is currently trading below its mean price and therefore has a higher probability of going up due to mean reversion theory.")
+
+high_percential = float(recent_high)*0.9
+
+if(float(latest_close) > float(mean)): 
+    if(float(latest_close) > float(high_percential)):
+         print("RECCOMENDATION: SHORT THE STOCK OR SELL IF YOU OWN THE STOCK")
+         print("RECOMMENDATION REASON: The company is currently trading above its mean price and about 90% of its recent high, you should short the stock or sell the stock if you own it!")
+    else:
+        print("RECCOMENDATION: DO NOT BUY! BUT IF YOU OWN THE STOCK YOU SHOULD HOLD IT!")
+        print("RECOMMENDATION REASON: Do not buy stock as the stock is trading about its mean and will probably revert back to its mean.")
+
 print("-------------------------")
 print("WRITING DATA INTO CSV...")
 print("-------------------------")
 print("HAPPY INVESTING!")
 print("-------------------------")
 #write a csv file into the data directory 
+
+
+
+
 
 csv_file_path = "data/prices.csv" # a relative filepath
 
