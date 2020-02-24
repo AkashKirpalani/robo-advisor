@@ -5,42 +5,7 @@ import csv
 from dotenv import load_dotenv
 import os
 import requests 
-
-import os
-
-from dotenv import load_dotenv
 from twilio.rest import Client
-
-load_dotenv()
-
-TWILIO_ACCOUNT_SID = os.environ.get("TWILIO_ACCOUNT_SID", "OOPS, please specify env var called 'TWILIO_ACCOUNT_SID'")
-TWILIO_AUTH_TOKEN  = os.environ.get("TWILIO_AUTH_TOKEN", "OOPS, please specify env var called 'TWILIO_AUTH_TOKEN'")
-SENDER_SMS  = os.environ.get("SENDER_SMS", "OOPS, please specify env var called 'SENDER_SMS'")
-RECIPIENT_SMS  = os.environ.get("RECIPIENT_SMS", "OOPS, please specify env var called 'RECIPIENT_SMS'")
-
-# AUTHENTICATE
-
-client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
-
-# COMPILE REQUEST PARAMETERS (PREPARE THE MESSAGE)
-
-content = "Hello, this is a message from your personal notification service. TODO: customize me!"
-
-# ISSUE REQUEST (SEND SMS)
-
-message = client.messages.create(to=RECIPIENT_SMS, from_=SENDER_SMS, body=content)
-
-# PARSE RESPONSE
-
-print("----------------------")
-print("SMS")
-print("----------------------")
-print("RESPONSE: ", type(message))
-print("FROM:", message.from_)
-print("TO:", message.to)
-print("BODY:", message.body)
-print("PROPERTIES:")
-print(message._properties))
 
 load_dotenv() #> loads contents of the .env file into the script's environment
 
@@ -65,7 +30,6 @@ while(correct == 0):
 api_key = os.environ.get("ALPHAVANTAGE_API_KEY")
 request_url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&apikey={api_key}"
 response = requests.get(request_url)
-
 
 
 while(response.status_code != 200):
@@ -124,7 +88,6 @@ for date in dates:
 	low_price = tsd[date]["3. low"]
 	low_prices.append(float(low_price))
 
-
 recent_high = max(high_prices) 
 recent_low = min(low_prices)
 
@@ -162,7 +125,6 @@ if(float(latest_close) < float(mean)):
 high_percential = float(recent_high)*0.9
 
 
-
 if(float(latest_close) > float(mean)): 
     if(float(latest_close) > float(high_percential)):
          print("RECCOMENDATION: SHORT THE STOCK OR SELL IF YOU OWN THE STOCK")
@@ -171,19 +133,40 @@ if(float(latest_close) > float(mean)):
         print("RECCOMENDATION: DO NOT BUY! BUT IF YOU OWN THE STOCK YOU SHOULD HOLD IT!")
         print("RECOMMENDATION REASON: Do not buy stock as the stock is trading about its mean and will probably revert back to its mean.")
 
+TWILIO_ACCOUNT_SID = os.environ.get("TWILIO_ACCOUNT_SID", "OOPS, please specify env var called 'TWILIO_ACCOUNT_SID'")
+TWILIO_AUTH_TOKEN  = os.environ.get("TWILIO_AUTH_TOKEN", "OOPS, please specify env var called 'TWILIO_AUTH_TOKEN'")
+SENDER_SMS  = os.environ.get("SENDER_SMS", "OOPS, please specify env var called 'SENDER_SMS'")
+
+
 print("-------------------------")
 print("WRITING DATA INTO CSV...")
 print("-------------------------")
 print("HAPPY INVESTING!")
 print("-------------------------")
-pr
+
+decision = input("Please enter yes if you want to recieve an alert if your stock goes above a selected price. If not Enter no: ")
+
+if(decision == "yes"):
+     price = input("What is your selected price? Please enter the selected price as a number: ")
+     RECIPIENT_SMS = input("PLEASE ENTER YOUR PHONE NUMBER SINCE YOU WANT A SUMMARY OF STOCK. Please enter your number with a +1 and make sure it is not more than 12 characters so no hyphens: ")
+ 
+     client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+
+# COMPILE REQUEST PARAMETERS (PREPARE THE MESSAGE)
+     if(float(latest_close) > float(price)) : 
+         print("Hello")
+         content= "Latest close is above selected price"
+         message = client.messages.create(to=RECIPIENT_SMS, from_=SENDER_SMS, body=content)
+
+
+if(decision == "no"):
+     print("NO WORRIES. HAVE A GREAT DAY!")
 
 
 
-print("THANK YOU! DONE--PROGRAM HAS ENDED. BE SURE TO LOOK OUT FOR MESSAGES")
+print("-------------------------")
+print("THANK YOU! DONE--PROGRAM HAS ENDED. BE SURE TO LOOK OUT FOR MESSAGES FOR PRICE ALERTS")
 #write a csv file into the data directory 
-
-
 
 csv_file_path = "data/prices.csv" # a relative filepath
 
