@@ -154,14 +154,11 @@ if(decision == "yes"):
 
 # COMPILE REQUEST PARAMETERS (PREPARE THE MESSAGE)
      if(float(latest_close) > float(price)) : 
-         print("Hello")
-         content= "Latest close is above selected price"
+         content= "Latest close is above selected price,"
          message = client.messages.create(to=RECIPIENT_SMS, from_=SENDER_SMS, body=content)
-
 
 if(decision == "no"):
      print("NO WORRIES. HAVE A GREAT DAY!")
-
 
 
 print("-------------------------")
