@@ -20,11 +20,10 @@ while(correct == 0):
     if(symbol.isalpha() == 1):
         correct = 1
         if(len(symbol) > 5):
-            print("OOPS! Sorry you inputed the wrong information. You inputed more than 5 letters! Please try again! A ticker is only between 1-5 letters")
+            print("OOPS! Sorry you inputed the wrong information. You inputed more than 5 letters! Please try again! A ticker is only between 1-5 letters, expecting ticker symbol like 'MSFT'.")
             correct = 0
     else:
         print("OOPS! Sorry you inputed the wrong information. You inputed numbers instead of letters! Please try again! A ticker is only letters and is between 1-5 letters, expecting ticker symbol like 'MSFT'.")
-        correct = 0
 
 
 api_key = os.environ.get("ALPHAVANTAGE_API_KEY")
@@ -51,11 +50,13 @@ api_error = response.text
 
 while(api_error[7]=="E"):
      print("OOPS sorry we encountered an error on calling the API. It seeems that you have entered incorrect series of characters. We were expecting a valid ticker symbol like 'MSFT'. Please try again.")
+     symbol = input("PLEASE INPUT A STOCK YOU ARE LOOKING TO BUY: ")
      while(correct == 0):
-        symbol = input("PLEASE INPUT A STOCK YOU ARE LOOKING TO BUY: ")
+        print(symbol)
         if(symbol.isalpha() == 1):
             correct = 1
             if(len(symbol) > 5):
+                print("hello")
                 print("OOPS! Sorry you inputed the wrong information. You inputed more than 5 letters! Please try again! A ticker is only between 1-5 letters, expecting ticker symbol like 'MSFT'.")
                 correct = 0
         else:
@@ -156,13 +157,13 @@ if(decision == "yes"):
      if(float(latest_close) > float(price)) : 
          content= "Latest close is above selected price,"
          message = client.messages.create(to=RECIPIENT_SMS, from_=SENDER_SMS, body=content)
+     print("-------------------------")
+     print("THANK YOU! DONE--PROGRAM HAS ENDED. BE SURE TO LOOK OUT FOR MESSAGES!")
 
 if(decision == "no"):
      print("NO WORRIES. HAVE A GREAT DAY!")
-
-
-print("-------------------------")
-print("THANK YOU! DONE--PROGRAM HAS ENDED. BE SURE TO LOOK OUT FOR MESSAGES FOR PRICE ALERTS")
+     print("-------------------------")
+     print("THANK YOU! DONE--PROGRAM HAS ENDED.")
 #write a csv file into the data directory 
 
 csv_file_path = "data/prices.csv" # a relative filepath
