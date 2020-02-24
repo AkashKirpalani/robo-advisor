@@ -31,7 +31,7 @@ You should set up a .env file with your ALPHAVANTAGE API key (provided by the we
 ```sh
 ALPHAVANTAGE_API_KEY="abc123"
 ```
-In addition you should have a the parameters for Twilio (this program is Twilio enabled) where you should have TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, and the SENDER_SMS. You will need to get these credentials from Twilio. When you set up an SMS enabled project with Twilio, it will instruct you on how to get your credentials. The credentials above need to be in your .env file. You may need to install Twilio
+In addition you should have a the parameters for Twilio (this program is Twilio enabled) where you should have TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, and the SENDER_SMS. You will need to get these credentials from Twilio. When you set up an SMS enabled project with Twilio, it will instruct you on how to get your credentials. The credentials above need to be in your .env file. You may need to install Twilio if you already don't have it. 
 ```sh
 pip install twilio
 ```
