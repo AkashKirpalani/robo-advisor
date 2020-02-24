@@ -166,7 +166,7 @@ if(decision == "no"):
      print("THANK YOU! DONE--PROGRAM HAS ENDED.")
 #write a csv file into the data directory 
 
-csv_file_path = "data/prices.csv" # a relative filepath
+csv_file_path = os.path.join(os.path.dirname(__file__), "..", "data", "prices.csv")
 
 csv_headers = ["timestamp", "open", "high", "low", "close", "volume"] 
 
