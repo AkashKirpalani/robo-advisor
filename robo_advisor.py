@@ -6,7 +6,41 @@ from dotenv import load_dotenv
 import os
 import requests 
 
+import os
 
+from dotenv import load_dotenv
+from twilio.rest import Client
+
+load_dotenv()
+
+TWILIO_ACCOUNT_SID = os.environ.get("TWILIO_ACCOUNT_SID", "OOPS, please specify env var called 'TWILIO_ACCOUNT_SID'")
+TWILIO_AUTH_TOKEN  = os.environ.get("TWILIO_AUTH_TOKEN", "OOPS, please specify env var called 'TWILIO_AUTH_TOKEN'")
+SENDER_SMS  = os.environ.get("SENDER_SMS", "OOPS, please specify env var called 'SENDER_SMS'")
+RECIPIENT_SMS  = os.environ.get("RECIPIENT_SMS", "OOPS, please specify env var called 'RECIPIENT_SMS'")
+
+# AUTHENTICATE
+
+client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+
+# COMPILE REQUEST PARAMETERS (PREPARE THE MESSAGE)
+
+content = "Hello, this is a message from your personal notification service. TODO: customize me!"
+
+# ISSUE REQUEST (SEND SMS)
+
+message = client.messages.create(to=RECIPIENT_SMS, from_=SENDER_SMS, body=content)
+
+# PARSE RESPONSE
+
+print("----------------------")
+print("SMS")
+print("----------------------")
+print("RESPONSE: ", type(message))
+print("FROM:", message.from_)
+print("TO:", message.to)
+print("BODY:", message.body)
+print("PROPERTIES:")
+print(message._properties))
 
 load_dotenv() #> loads contents of the .env file into the script's environment
 
@@ -24,13 +58,16 @@ while(correct == 0):
             print("OOPS! Sorry you inputed the wrong information. You inputed more than 5 letters! Please try again! A ticker is only between 1-5 letters")
             correct = 0
     else:
-        print("OOPS! Sorry you inputed the wrong information. You inputed numbers instead of letters! Please try again! A ticker is only letters and is between 1-5 letters")
-
+        print("OOPS! Sorry you inputed the wrong information. You inputed numbers instead of letters! Please try again! A ticker is only letters and is between 1-5 letters, expecting ticker symbol like 'MSFT'.")
+        correct = 0
 
 
 api_key = os.environ.get("ALPHAVANTAGE_API_KEY")
 request_url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&apikey={api_key}"
 response = requests.get(request_url)
+
+
+
 while(response.status_code != 200):
      print("OOPS sorry we encountered an error on calling the API. Please try again.")
      while(correct == 0):
@@ -38,12 +75,33 @@ while(response.status_code != 200):
         if(symbol.isalpha() == 1):
             correct = 1
             if(len(symbol) > 5):
-                print("OOPS! Sorry you inputed the wrong information. You inputed more than 5 letters! Please try again! A ticker is only between 1-5 letters")
+                print("OOPS! Sorry you inputed the wrong information. You inputed more than 5 letters! Please try again! A ticker is only between 1-5 letters, expecting ticker symbol like 'MSFT'.")
                 correct = 0
         else:
-            print("OOPS! Sorry you inputed the wrong information. You inputed numbers instead of letters! Please try again! A ticker is only letters and is between 1-5 letters")
+            print("OOPS! Sorry you inputed the wrong information. You inputed numbers instead of letters! Please try again! A ticker is only letters and is between 1-5 letters, expecting ticker symbol like 'MSFT'.")
+            correct = 0
+correct = 0
 
+api_error = []
+api_error = response.text
 
+while(api_error[7]=="E"):
+     print("OOPS sorry we encountered an error on calling the API. It seeems that you have entered incorrect series of characters. We were expecting a valid ticker symbol like 'MSFT'. Please try again.")
+     while(correct == 0):
+        symbol = input("PLEASE INPUT A STOCK YOU ARE LOOKING TO BUY: ")
+        if(symbol.isalpha() == 1):
+            correct = 1
+            if(len(symbol) > 5):
+                print("OOPS! Sorry you inputed the wrong information. You inputed more than 5 letters! Please try again! A ticker is only between 1-5 letters, expecting ticker symbol like 'MSFT'.")
+                correct = 0
+        else:
+            print("OOPS! Sorry you inputed the wrong information. You inputed numbers instead of letters! Please try again! A ticker is only letters and is between 1-5 letters, expecting ticker symbol like 'MSFT'.")
+            correct = 0
+     api_key = os.environ.get("ALPHAVANTAGE_API_KEY")
+     request_url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&apikey={api_key}"
+     response = requests.get(request_url)
+     api_error = []
+     api_error = response.text
 
 parsed_response = json.loads(response.text)
 
@@ -52,7 +110,6 @@ tsd = parsed_response["Time Series (Daily)"]
 
 dates = list(tsd.keys())
 lastest_day = dates[0] 
-#sort this to ensure that the latest day is first 
 
 
 last_refreshed = parsed_response["Meta Data"]["3. Last Refreshed"]
@@ -104,6 +161,8 @@ if(float(latest_close) < float(mean)):
 
 high_percential = float(recent_high)*0.9
 
+
+
 if(float(latest_close) > float(mean)): 
     if(float(latest_close) > float(high_percential)):
          print("RECCOMENDATION: SHORT THE STOCK OR SELL IF YOU OWN THE STOCK")
@@ -117,7 +176,11 @@ print("WRITING DATA INTO CSV...")
 print("-------------------------")
 print("HAPPY INVESTING!")
 print("-------------------------")
-print("THANK YOU! DONE--PROGRAM HAS ENDED.")
+pr
+
+
+
+print("THANK YOU! DONE--PROGRAM HAS ENDED. BE SURE TO LOOK OUT FOR MESSAGES")
 #write a csv file into the data directory 
 
 

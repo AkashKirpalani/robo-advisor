@@ -21,7 +21,9 @@ And from in this virtual environment run
 ```sh
 python robo_advisor.py
 ```
+Remeber to
 
 ## Security
-Also remember to create a .env file with your secret key for storage (for the alphavantage API) and a .gitignore file for security if your git repository is public. 
+Also remember to create a .env file with your secret key for storage (for the alphavantage API) and a .gitignore file for security if your git repository is public. The gitignore file should have a .env. 
+
 
